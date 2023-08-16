@@ -1,0 +1,9 @@
+route:
+  receiver: 'default-receiver'
+  repeat_interval: 4h
+  
+receivers:
+  - name: default-receiver
+    slack_configs:
+    - api_url: 'https://hooks.slack.com/services/<custom_app_webhook_token>'
+
