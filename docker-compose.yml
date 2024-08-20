@@ -1,4 +1,8 @@
 version: '3.2'
+networks:
+  monitoring:
+    driver: bridge
+
 services:
   prometheus:
     image: prom/prometheus:latest
@@ -12,6 +16,22 @@ services:
     - ./alerts.yml:/etc/prometheus/alerts.yml:ro
     depends_on:
     - cadvisor
+    - node_exporter
+    networks:
+    - monitoring
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=/host'
+    pid: host
+    expose:
+    - 9100
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslavei'
+    networks:
+    - monitoring
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
@@ -22,6 +42,8 @@ services:
     - /var/run:/var/run:rw
     - /sys:/sys:ro
     - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+    - monitoring
     depends_on:
     - redis
   redis:
