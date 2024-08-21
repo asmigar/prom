@@ -9,6 +9,11 @@ scrape_configs:
   static_configs:
   - targets:
     - node_exporter:9100
+- job_name: hello_world
+  scrape_interval: 5s
+  static_configs:
+  - targets:
+    - hello_world:3000
 
 rule_files:
   - /etc/prometheus/alerts.yml

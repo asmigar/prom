@@ -4,6 +4,12 @@ networks:
     driver: bridge
 
 services:
+  hello_world:
+    build: ./hello-world
+    ports:
+    - 3000:3000
+    networks:
+    - monitoring
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
